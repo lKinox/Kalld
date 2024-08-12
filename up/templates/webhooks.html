@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Webhooks</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th class="th1">Phone number</th>
+                <th class="thspc"></th>
+                <th class="th2">Text</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in webhooks_data %}
+            <tr>
+                <td class="td1">{{ row[2] }}</td>
+                <td class="thspc"></td>
+                <td class="td2">{{ row[1] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if not webhooks_data %}
+        <p>No hay webhooks en la base de datos.</p>
+    {% endif %}
+{% endblock %}
+
+
+

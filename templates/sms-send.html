@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>SMS-Send</h1>
+  <form action="/sms-send" method="post" class="sms">
+    <p>Send from</p>
+    <select name="telnyx_number" class="input1" id="telnyx_number">
+      <option value="+19415571376">+19415571376</option>
+      <option value="+19415571346">+19415571346</option>
+      <option value="+19415571342">+19415571342</option>
+      <option value="+19415571309">+19415571309</option>
+      <option value="+19415571279">+19415571279</option>
+      <option value="+19415571250">+19415571250</option>
+      <option value="+19415571238">+19415571238</option>
+      <option value="+19415571231">+19415571231</option>
+      <option value="+19415571066">+19415571066</option>
+      <option value="+18887040169">+18887040169</option>
+      <option value="+18886843128">+18886843128</option>
+      <option value="+18884105184">+18884105184</option>
+      <option value="+18883471146">+18883471146</option>
+      <option value="+18882781335">+18882781335</option>
+      <option value="+12692389791">+12692389791</option>
+    </select>
+    <p>Recipient number</p>
+    <input class="input1" type="text" name="dest_number" placeholder="Recipient number">
+    <p>Content</p>
+    <textarea class="input1" name="sms_content" placeholder="SMS content"></textarea>
+    <input class="btn" type="submit" value="Send sms">
+  </form>
+  <p style="padding: 0px 20px;">{{ data }}</p>
+  <script>
+
+    // Get the stored number on page load
+    const selectedNumberForForm = localStorage.getItem("selectedNumberTelnyx");
+
+    // If there is a stored number, show it in the select
+    if (selectedNumberForForm) {
+      const inputElementTelnyx = document.getElementById("telnyx_number");
+      inputElementTelnyx.value = selectedNumberForForm;
+    }
+
+
+    const selectElementTelnyx = document.getElementById("telnyx_number");
+    // Function to save the selected number
+    function saveSelectedNumberTelnyx() {
+      // Get the selected number from the select element
+      const selectElementTelnyx = document.getElementById("telnyx_number").value;
+
+      // Save the number in local storage
+      localStorage.setItem("selectedNumberTelnyx", selectElementTelnyx);
+
+      // Optional: Show a confirmation message
+      console.log("Number saved:", selectElementTelnyx);
+    }
+
+    // Add the "change" event to the select to call the function
+   // document.getElementById("telnyx_number").addEventListener("change", saveSelectedNumber);
+    selectElementTelnyx.addEventListener("change", saveSelectedNumberTelnyx);
+  </script>
+{% endblock %}

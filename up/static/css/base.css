@@ -1,0 +1,90 @@
+body {
+    margin: 0px;
+}
+
+nav {
+    background-color: #82be5e;
+    padding: 20px 30px;
+}
+
+nav a {
+    color: #FFF;
+    font-family: Roboto;
+    text-decoration: none;
+    margin: 0px 10px;
+}
+
+h1 {
+    padding: 0px 20px;
+    font-family: Roboto;
+}
+
+.sms {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    padding: 0px 20px;
+}
+
+p {
+    font-family: Roboto;
+    margin: 5px 0px;
+}
+
+.input1 {
+    padding: 10px 16px;
+    margin: 0px 0px 10px 0px;
+    font-family: roboto;
+    border-radius: 7px;
+    border: 0.5px #9b9b9b solid;
+}
+
+.btn {
+    font-family: roboto;
+    font-size: 18px;
+    color: #FFF;
+    background-color: #82be5e;
+    border: 0px;
+    border-radius: 7px;
+    padding: 12px 20px;
+    margin: 10px 0px 0px 0px;
+}
+
+table {
+    display: flex;
+    font-family: Roboto;
+    margin: 0px 20px;
+    background-color: #82be5e;
+    border-radius: 3px;
+    flex-direction: column;
+    border: solid 1px #d8d8d8;
+}
+
+.th1 {
+    border-bottom: 0.5px solid #FFF;
+    padding: 5px 7px;
+    width: 20%;
+}
+
+.th2 {
+    border-bottom: 0.5px solid #FFF;
+    padding: 5px 7px;
+    width: 80%;
+}
+
+.thspc {
+    border-left: 0.5px solid #FFF;
+}
+
+.td1 {
+    border-bottom: 0.5px solid #FFF;
+    text-align: center;
+    padding: 5px 7px;
+    width: 20%;
+}
+
+.td2 {
+    border-bottom: 0.5px solid #FFF;
+    padding: 5px 7px;
+    width: 80%;
+}

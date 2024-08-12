@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Calls</h1>
+
+  <form id="call-form" class="sms">
+    <p>From:</p>
+    <select name="from-number" class="input1" id="from-number" required>
+      <option value="+19415571376">+19415571376</option>
+      <option value="+19415571346">+19415571346</option>
+      <option value="+19415571342">+19415571342</option>
+      <option value="+19415571309">+19415571309</option>
+      <option value="+19415571279">+19415571279</option>
+      <option value="+19415571250">+19415571250</option>
+      <option value="+19415571238">+19415571238</option>
+      <option value="+19415571231">+19415571231</option>
+      <option value="+19415571066">+19415571066</option>
+      <option value="+18887040169">+18887040169</option>
+      <option value="+18886843128">+18886843128</option>
+      <option value="+18884105184">+18884105184</option>
+      <option value="+18883471146">+18883471146</option>
+      <option value="+18882781335">+18882781335</option>
+      <option value="+12692389791">+12692389791</option>
+    </select>
+    <p>To:</p>
+    <input type="text" id="to-number" name="to-number" required class="input1">
+    <button type="submit" class="btn">Call</button>
+  </form>
+
+  <div id="call-modal" class="hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Incoming call</h2>
+      </div>
+      <div class="modal-body">
+        <p>Phone number: <span id="caller-number"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button id="accept-button" class="btn btn-primary">Accept</button>
+        <button id="reject-button" class="btn btn-danger">Decline</button>
+      </div>
+    </div>
+  </div>
+
+  <audio id="remoteMedia" autoplay="true" controls style="display: none; margin: 5px 20px;"></audio>
+  <button id="hold-button" class="btn btn-secondary" style="margin: 5px 20px;">Hold</button>
+  <button id="mute-button" class="btn btn-secondary" style="margin: 5px 20px;">Mute</button>
+  <button id="hangup-button" class="btn btn-secondary" style="margin: 5px 20px;">Hangup</button>
+  <form id="transfer-form">
+    <input type="text" id="to-number-transfer" name="to-number-transfer" required class="input1">
+    <button type="submit" class="btn">Transfer</button>
+  </form>
+
+  <script type="text/javascript" src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/@telnyx/webrtc@2.10.1/lib/bundle.js"></script>
+
+  <script>
+    const client = new TelnyxWebRTC.TelnyxRTC({
+      login: "jcollins65537", // Reemplaza con tu nombre de usuario SIP
+      password: "lbmUhlQS", // Reemplaza con tu contraseña SIP
+    });
+
+    client.connect();
+
+    let activeCall = false;
+    let isOnHold = false;
+    let isAudioMuted = false;
+
+    client.on("telnyx.ready", () => console.log("Listo para realizar llamadas"));
+
+    client.on("telnyx.notification", (notification) => {
+      console.log("Notificación:", notification);
+
+      const call = notification.call;
+
+      // Comprueba el tipo de notificación
+      if (notification.type === "callUpdate" && call.state === "ringing") {
+        if (!activeCall) {
+          document.getElementById("call-modal").classList.remove("hidden");
+          document.getElementById("caller-number").textContent = call.options.remoteCallerNumber;
+
+          document.getElementById("accept-button").addEventListener("click", () => {
+            document.getElementById("call-modal").classList.add("hidden");
+            activeCall = true;
+            call.answer();
+
+            const transForm = document.getElementById("transfer-form");
+
+            transForm.addEventListener("submit", (event) => {
+              event.preventDefault();
+
+              const toNumberTransfer = document.getElementById("to-number-transfer").value;
+              call.transfer(to=toNumberTransfer)
+            });
+
+            document.getElementById("hangup-button").addEventListener("click", () => {
+              call.hangup();
+            });
+          });
+
+          document.getElementById("reject-button").addEventListener("click", () => {
+            call.hangup();
+            document.getElementById("call-modal").classList.add("hidden");
+          });
+        }
+      }
+    });
+
+    client.remoteElement = 'remoteMedia';
+    client.enableMicrophone();
+
+    const callForm = document.getElementById("call-form");
+
+    callForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const toNumber = document.getElementById("to-number").value;
+      const fromNumber = document.getElementById("from-number").value;
+
+      // Crea la llamada
+      const call = client.newCall({
+        destinationNumber: toNumber,
+        callerNumber: fromNumber
+      });
+
+      // Configura el elemento de audio remoto
+      client.remoteElement = 'remoteMedia'
+
+      // Activa el micrófono
+      client.enableMicrophone();
+
+      activeCall = true;
+
+      const transForm = document.getElementById("transfer-form");
+
+      transForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const toNumberTransfer = document.getElementById("to-number-transfer").value;
+        call.transfer(to=toNumberTransfer)
+      });
+
+      document.getElementById("hangup-button").addEventListener("click", () => {
+        call.hangup();
+      });
+    });
+
+
+    const audioElement = document.getElementById("remoteMedia");
+    setInterval(() => {
+      if (activeCall) {
+        document.getElementById("remoteMedia").style.display = "block";
+        document.getElementById("hold-button").style.display = "block";
+        document.getElementById("mute-button").style.display = "block";
+        document.getElementById("hangup-button").style.display = "block";
+        document.getElementById("transfer-form").style.display = "block";
+      } 
+      else {
+        document.getElementById("remoteMedia").style.display = "none";
+        document.getElementById("hold-button").style.display = "none";
+        document.getElementById("mute-button").style.display = "none";
+        document.getElementById("hangup-button").style.display = "none";
+        document.getElementById("transfer-form").style.display = "none";
+      }
+    })
+
+    function holdCall() {
+      if (!isOnHold) {
+        call.hold();
+        isOnHold = true;
+        // Actualiza la interfaz para mostrar que la llamada está en espera
+      } else {
+        call.unhold();
+        isOnHold = false;
+        // Actualiza la interfaz para mostrar que la llamada ya no está en espera
+      }
+    }
+
+    function muteAudio() {
+      if (!isAudioMuted) {
+        call.muteAudio();
+        isAudioMuted = true;
+        // Actualiza la interfaz para mostrar que el audio está silenciado
+      } else {
+        call.unmuteAudio();
+        isAudioMuted = false;
+        // Actualiza la interfaz para mostrar que el audio ya no está silenciado
+      }
+    }
+
+    document.getElementById("hold-button").addEventListener("click", holdCall);
+    document.getElementById("mute-button").addEventListener("click", muteAudio);
+
+    if (isOnHold) {
+      document.getElementById("hold-button").textContent = "Resume call";
+    } else {
+      document.getElementById("hold-button").textContent = "Put on hold";
+    }
+
+    if (isAudioMuted) {
+      document.getElementById("mute-button").textContent = "Activate audio";
+    } else {
+      document.getElementById("mute-button").textContent = "Mute audio";
+    }
+
+  </script>
+  <script>
+    // calls
+    const storedNumber = localStorage.getItem("selectedNumber");
+    
+    // If there is a stored number, show it in the input
+    if (storedNumber) {
+      const inputElement = document.getElementById("from-number");
+      inputElement.value = storedNumber;
+    }
+    
+    // Get the select element
+    const selectElement = document.getElementById("from-number");
+    
+    // Function to save the selected number
+    function saveSelectedNumber() {
+      // Get the selected number from the select element
+      const selectedNumber = selectElement.value;
+    
+      // Save the number in local storage
+      localStorage.setItem("selectedNumber", selectedNumber);
+    
+      // Optional: Show a confirmation message
+      console.log("Number saved:", selectedNumber);
+    }
+    
+    // Add the "change" event to the select to call the function
+    selectElement.addEventListener("change", saveSelectedNumber);
+    </script>
+{% endblock %}

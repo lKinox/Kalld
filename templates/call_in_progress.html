@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Incoming call</h1>
+
+  <p>{{ data }}</p>
+
+  <audio controls>
+    <source src="/stream-audio?call_id={{ call_id }}" type="audio/x-raw,channels=1,rate=8000">
+    Su navegador no admite el formato de audio especificado.
+  </audio>
+
+  <!--<script>
+    var socket = io();
+
+    socket.on('data', (data) => {
+      const call_control_id = data.call_control_id;
+      const caller_id_name = data.caller_id_name;
+
+      console.log(call_control_id)
+      console.log(caller_id_name)
+    });
+
+  </script>-->
+
+  <script src="https://unpkg.com/wavesurfer.js@7"></script>
+  <script>
+    const WaveSurfer = require("https://unpkg.com/wavesurfer.js@7");
+    import SIP from "static/js/sip-0.21.2.js";
+  
+    // Configurar la conexión SIP
+    const sip = new SIP.Session({
+        uri: "sip:jcollins65537@sip.telnyx.com",
+        password: "lbmUhlQS",
+        registrar: "sip:registrar.telnyx.com",
+    });
+
+    // Configurar WaveSurfer
+    const wavesurfer = new WaveSurfer({
+        container: document.getElementById("waveform"),
+    });
+
+    // ...
+
+    // Función para enviar la señal de audio a Telnyx
+    function sendAudio(data) {
+        sip.sendAudio(data);
+    }
+
+    // Función para recibir la señal de audio de Telnyx
+    function receiveAudio(data) {
+        // Decodificar la señal de audio y reproducirla en los altavoces
+        // ...
+    }
+
+    // Registrar eventos de llamada
+    sip.on("call", (call) => {
+        console.log("Nueva llamada entrante");
+
+        // Responder a la llamada
+        call.answer();
+
+        // Enviar y recibir audio
+        call.on("audio", (data) => {
+            receiveAudio(data);
+        });
+
+        call.on("sendaudio", (data) => {
+            sendAudio(data);
+        });
+    });
+
+    // Iniciar la sesión SIP
+    sip.start();
+  </script>
+{% endblock %}

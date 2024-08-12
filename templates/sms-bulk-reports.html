@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Bulk SMS-Reports</h1>
+
+  <table class="sms-table">
+    <thead>
+        <tr>
+            <th class="th1-sms">Start date</th>
+            <th class="thspc"></th>
+            <th class="th1-sms">Sender number</th>
+            <th class="thspc"></th>
+            <th class="th1-sms">Number of SMS sent</th>
+            <th class="thspc"></th>
+            <th class="th1-sms">End date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tbody>
+            {% for data in sms_data | reverse%}
+                <tr>
+                    <td class="td1-sms">{{ data[1] }}</td>
+                    <td class="thspc"></td>
+                    <td class="td1-sms">{{ data[2] }}</td>
+                    <td class="thspc"></td>
+                    <td class="td1-sms">{{ data[3] }}</td>
+                    <td class="thspc"></td>
+                    <td class="td1-sms">{{ data[4] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+</table>
+{% endblock %}

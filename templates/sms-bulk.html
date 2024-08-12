@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Bulk SMS-Send</h1>
+  <p class="download">CSV template: <a href=" {{ url_for('static', filename='example/csv-example.csv') }} ">Download</a></p>
+  <p class="download">Available labels:
+    <ul style="font-family: Roboto; font-size: 12px; list-style: none; display: flex; flex-direction: row;">
+      <li style="margin: 0px 5px 0px 0px;"><b>{PHONE_NUMBER}</b></li>
+      <li style="margin: 0px 5px 0px 0px;"><b>{BUSINESS_NAME}</b></li>
+      <li style="margin: 0px 5px 0px 0px;"><b>{CONTACT_NAME}</b></li>
+      <li style="margin: 0px 5px 0px 0px;"><b>{ADDRESS}</b></li>
+      <li style="margin: 0px 5px 0px 0px;"><b>{CITY}</b></li>
+      <li style="margin: 0px 5px 0px 0px;"><b>{STATE}</b></li>
+      <li style="margin: 0px 5px 0px 0px;"><b>{ZIP_CODE}</b></li>
+      <li style="margin: 0px 5px 0px 0px;"><b>{COMMUNICATION_METHOD}</b></li>
+      <li style="margin: 0px 5px 0px 0px;"><b>{BIRTHDAY}</b></li>
+      <li style="margin: 0px 5px 0px 0px;"><b>{CUSTOM_1}</b></li>
+      <li style="margin: 0px 5px 0px 0px;"><b>{CUSTOM_2}</b></li>
+      <li style="margin: 0px 5px 0px 0px;"><b>{CUSTOM_3}</b></li>
+    </ul>
+  </p>
+  <form action="/bulk-sms-send" method="post" class="sms" enctype="multipart/form-data">
+    <p>Send from</p>
+    <select name="telnyx_number" class="input1" id="telnyx_number">
+      <option value="+19415571376">+19415571376</option>
+      <option value="+19415571346">+19415571346</option>
+      <option value="+19415571342">+19415571342</option>
+      <option value="+19415571309">+19415571309</option>
+      <option value="+19415571279">+19415571279</option>
+      <option value="+19415571250">+19415571250</option>
+      <option value="+19415571238">+19415571238</option>
+      <option value="+19415571231">+19415571231</option>
+      <option value="+19415571066">+19415571066</option>
+      <option value="+18887040169">+18887040169</option>
+      <option value="+18886843128">+18886843128</option>
+      <option value="+18884105184">+18884105184</option>
+      <option value="+18883471146">+18883471146</option>
+      <option value="+18882781335">+18882781335</option>
+      <option value="+12692389791">+12692389791</option>
+    </select>
+    <p>Recipient numbers (CSV file)</p>
+    <input class="input1" type="file" name="csv_file">
+    <p>Content</p>
+    <textarea class="input1" name="sms_content" placeholder="SMS content"></textarea>
+    <input class="btn" type="submit" value="Send SMS Bulk">
+  </form>
+  {% if data %}
+  <p style="padding: 0px 20px;">{{ data }} {{ sent_count }} of {{ number_count }}</p>
+  {% endif %}
+  <script>
+
+    // Get the stored number on page load
+    const selectedNumberBulk = localStorage.getItem("selectedNumberBulk");
+
+    // If there is a stored number, show it in the select
+    if (selectedNumberBulk) {
+      const inputElementBulk = document.getElementById("telnyx_number");
+      inputElementBulk.value = selectedNumberBulk;
+    }
+
+
+    const selectElementBulk = document.getElementById("telnyx_number");
+    // Function to save the selected number
+    function saveSelectedNumber() {
+      // Get the selected number from the select element
+      const selectElementBulk = document.getElementById("telnyx_number").value;
+
+      // Save the number in local storage
+      localStorage.setItem("selectedNumberBulk", selectElementBulk);
+
+      // Optional: Show a confirmation message
+      console.log("Number saved:", selectElementBulk);
+    }
+
+    // Add the "change" event to the select to call the function
+   // document.getElementById("telnyx_number").addEventListener("change", saveSelectedNumber);
+    selectElementBulk.addEventListener("change", saveSelectedNumber);
+  </script>
+{% endblock %}

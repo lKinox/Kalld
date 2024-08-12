@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href=" {{ url_for('static', filename='img/logo.jpeg') }} ">
+    <link rel="stylesheet" href=" {{ url_for('static', filename='css/base.css') }} ">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+
+    <title>Document</title>
+</head>
+<body>
+    <nav>
+        <a href="/call">Make Kall'd Calls</a>
+        <a href="/call-history">Kall'd Call History</a>
+        <a href="/sms-send">SMS-Send</a>
+        <a href="/sms-inbound">SMS-Inbound</a>
+        <a href="/bulk-sms-send">Bulk SMS-Send</a>
+        <a href="/bulk-sms-reports">Bulk SMS-Reports</a>
+        <a href="/logout">Log Out</a>
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+</body>
+<!--<script src=" {{ url_for('static', filename='js/functions.js') }} "></script>-->
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var socket = io();
+  
+    socket.on('data_updated', (data) => {
+      // Procesa los datos recibidos
+      const from_call = data.from_call;
+      const to_call = data.to_call;
+
+      console.log(from_call)
+      console.log(to_call)
+  
+      // Eliminamos el popup si ya está visible
+      const existingPopup = document.querySelector('.popup');
+      if (existingPopup) {
+        existingPopup.remove();
+      }
+  
+      // Crea un popup HTML
+      const popup = document.createElement('div');
+      popup.classList.add('popup');
+      popup.style.display = 'block';
+      popup.style.backgroundColor = '#ccc';
+      popup.style.position = 'fixed';
+      popup.style.bottom = '0px';
+      popup.style.left = '0px';
+      popup.style.width = '100%';
+      popup.style.height = 'auto';
+      popup.style.padding = '10px 15px';
+      popup.innerHTML = `
+        <div>
+          <h1>Received call</h1>
+          <p>From: ${from_call}</p>
+          <p>To: ${to_call}</p>
+          <a href="/call" style="font-family: roboto;
+          font-size: 14px;
+          color: #FFF;
+          background-color: #82be5e;
+          border: 0px;
+          border-radius: 7px;
+          padding: 6px 16px;
+          margin: 20px 0px 20px 0px;">See call</a>
+          <p class="tiempo-restante">Se eliminará en 10 segundos</p>
+          <button class="close-popup" style="position: absolute; top: 10px; right: 30px; border: none; background-color: transparent; cursor: pointer;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cerrar-popup-icono">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      `;
+
+      const closePopupButton = document.querySelector('.close-popup');
+      
+
+      // Mostramos el nuevo popup
+      document.body.appendChild(popup);
+  
+      // Configuramos el valor de popupVisible en el almacenamiento local
+      localStorage.setItem('popupVisible', 'true');
+  
+      // Calculamos el timestamp de creación del popup
+      const timestamp = Date.now();
+  
+      // Función para eliminar el popup
+      function eliminarPopup() {
+        const popup = document.querySelector('.popup');
+        if (!popup) return;
+  
+        const elapsedTime = Date.now() - timestamp;
+        const timeLimit = 120000; // 10 segundos en milisegundos
+  
+        if (elapsedTime >= timeLimit) {
+          popup.classList.add('fadeOut');
+          setTimeout(() => {
+            popup.remove();
+            localStorage.setItem('popupVisible', 'false');
+          }, 1000);
+        } else {
+          // Si no ha pasado el tiempo límite, actualizamos el tiempo restante
+          const remainingTime = timeLimit - elapsedTime;
+          actualizarTiempoRestante(remainingTime);
+  
+          // Re-agendamos la función para que se ejecute después de 1 segundo
+          setTimeout(eliminarPopup, 1000);
+        }
+      }
+  
+      // Función para actualizar el tiempo restante
+      function actualizarTiempoRestante(remainingTime) {
+        const tiempoRestanteElement = document.querySelector('.tiempo-restante');
+        if (!tiempoRestanteElement) return;
+  
+        tiempoRestanteElement.textContent = `Se eliminará en ${Math.floor(remainingTime / 1000)} segundos`;
+      }
+  
+      // Llamamos a la función para eliminar el popup después del tiempo límite
+      eliminarPopup();
+    });
+  </script>
+
+
+  <script type="text/javascript" src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/@telnyx/webrtc@2.10.1/lib/bundle.js"></script>
+</html>

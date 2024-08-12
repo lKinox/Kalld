@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Kall'd Call History</h1>
+
+<table class="sms-table">
+<thead>
+  <tr>
+    <th class="th1-sms">Start Date</th>
+    <th class="thspc"></th>
+    <th class="th1-sms">Direction</th>
+    <th class="thspc"></th>
+    <th class="th1-sms">From</th>
+    <th class="thspc"></th>
+    <th class="th1-sms">To</th>
+  </tr>
+</thead>
+<tbody>
+  <tbody>
+    {% for data in call_data | reverse %}
+      <tr>
+        <td class="td1-sms">{{ data.occurred_at }}</td>
+        <td class="thspc"></td>
+        <td class="td1-sms">{{ data.direction }}</td>
+        <td class="thspc"></td>
+        <td class="td1-sms">{{ data.from_number }}</td>
+        <td class="thspc"></td>
+        <td class="td1-sms">{{ data.to_number }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

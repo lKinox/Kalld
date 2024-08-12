@@ -1,0 +1,211 @@
+body {
+    margin: 0px;
+}
+
+nav {
+    background-color: #82be5e;
+    padding: 20px 30px;
+}
+
+nav a {
+    color: #FFF;
+    font-family: Roboto;
+    text-decoration: none;
+    margin: 0px 10px;
+}
+
+h1 {
+    padding: 0px 20px;
+    font-family: Roboto;
+}
+
+.img {
+    width: 300px;
+}
+
+.sms {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    padding: 0px 20px;
+}
+
+.download {
+    padding: 0px 0px 0px 20px;
+    font-size: 13px;
+}
+
+p {
+    font-family: Roboto;
+    margin: 5px 0px;
+}
+
+.input1 {
+    padding: 10px 16px;
+    margin: 0px 0px 10px 0px;
+    font-family: roboto;
+    border-radius: 7px;
+    border: 0.5px #9b9b9b solid;
+}
+
+.btn {
+    font-family: roboto;
+    font-size: 18px;
+    color: #FFF;
+    background-color: #82be5e;
+    border: 0px;
+    border-radius: 7px;
+    padding: 12px 20px;
+    margin: 10px 0px 0px 0px;
+}
+
+table {
+    display: flex;
+    font-family: Roboto;
+    margin: 0px 20px;
+    background-color: #82be5e;
+    border-radius: 3px;
+    flex-direction: column;
+    border: solid 1px #d8d8d8;
+}
+
+.th1 {
+    border-bottom: 0.5px solid #FFF;
+    padding: 5px 7px;
+    width: 15%;
+}
+
+.th2 {
+    border-bottom: 0.5px solid #FFF;
+    padding: 5px 7px;
+    width: 80%;
+}
+
+.thspc {
+    border-left: 0.5px solid #FFF;
+}
+
+.td1 {
+    border-bottom: 0.5px solid #FFF;
+    text-align: center;
+    padding: 5px 7px;
+    width: 15%;
+}
+
+.td2 {
+    border-bottom: 0.5px solid #FFF;
+    padding: 5px 7px;
+    width: 80%;
+}
+
+
+.sms-table thead tr, .sms-table tbody tr{
+    display: flex;
+}
+
+
+.th1-sms {
+    border-bottom: 0.5px solid #FFF;
+    padding: 5px 7px;
+    width: 25%;
+}
+
+.td1-sms {
+    border-bottom: 0.5px solid #FFF;
+    padding: 5px 7px;
+    width: 25%;
+}
+
+.row-per {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-response {
+    display: flex;
+    flex-direction: column;
+}
+
+.input2 {
+    padding: 10px 16px;
+    margin: 10px 0px 10px 0px;
+    font-family: roboto;
+    border-radius: 7px;
+    border: 0.5px #9b9b9b solid;
+}
+
+.btn2 {
+    width: 200px;
+    font-family: roboto;
+    font-size: 14px;
+    color: #000000;
+    background-color: #d4d4d4;
+    border: 0px;
+    border-radius: 7px;
+    padding: 10px 16px;
+}
+
+.btn_form_resp {
+    font-family: roboto;
+    font-size: 14px;
+    color: #000000;
+    background-color: #ffffff;
+    border: 0px;
+    border-radius: 7px;
+    padding: 10px 16px;
+}
+
+#call-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 500px;
+    max-width: 90%;
+}
+  
+.modal-header {
+text-align: center;
+}
+
+.modal-body {
+text-align: center;
+}
+
+.modal-footer {
+text-align: center;
+}
+
+.btn {
+margin: 5px;
+}
+
+.hidden {
+display: none !important;
+}
+
+.popup {
+    animation-name: fadeIn;
+    animation-duration: 1s;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }

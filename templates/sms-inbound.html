@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>SMS-Inbound</h1>
+
+    {% for message in get_flashed_messages() %}
+    <p style="padding: 0px 20px;">
+        {{ message }}
+    </p>
+    {% endfor %}
+
+    <table>
+        <thead>
+            <tr>
+                <th class="th1">Date</th>
+                <th class="thspc"></th>
+                <th class="th1">From</th>
+                <th class="thspc"></th>
+                <th class="th1">To</th>
+                <th class="thspc"></th>
+                <th class="th2">Text</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in webhooks_data | reverse%}
+            <tr>
+                <td class="td1">{{ row[4] }}</td>
+                <td class="thspc"></td>
+                <td class="td1">{{ row[2] }}</td>
+                <td class="thspc"></td>
+                <td class="td1">{{ row[3] }}</td>
+                <td class="thspc"></td>
+                <td class="td2">
+                    <div class="row-per">
+                        {{ row[1] }}
+                        <a id="btn_form_resp" class="btn_form_resp" href="#">Reply</a>
+                    </div>
+                    <div id="sms_form_resp">
+                        <form action="/answer-sms" method="post" class="form-response">
+                            <input name="dest_number" type="hidden" value="{{ row[2] }}">
+                            <input name="telnyx_number" type="hidden" value="{{ row[3] }}">
+                            <textarea class="input2" name="sms_content" placeholder="SMS content"></textarea>
+                            <input class="btn2" type="submit" value="Send sms">
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if not webhooks_data %}
+        <p>No hay webhooks en la base de datos.</p>
+    {% endif %}
+
+    <script>
+        const rows = document.querySelectorAll("tbody tr"); // Selecciona todas las filas de la tabla
+      
+      rows.forEach((row) => {
+        const answerLink = row.querySelector("#btn_form_resp"); // Selecciona el enlace "Answer" de cada fila
+        const answerForm = row.querySelector("#sms_form_resp"); // Selecciona el formulario de respuesta de cada fila
+      
+        // Inicialmente oculta el formulario de respuesta
+        answerForm.style.display = "none";
+      
+        // Agrega un evento click al enlace "Answer"
+        answerLink.addEventListener("click", () => {
+          // Muestra u oculta el formulario de respuesta según su estado actual
+          if (answerForm.style.display === "none") {
+            answerForm.style.display = "block";
+          } else {
+            answerForm.style.display = "none";
+          }
+        });
+      });
+      </script>
+{% endblock %}
+
+
+
